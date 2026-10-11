@@ -1,0 +1,72 @@
+# ========================================================
+# 7ABA IMPLEMENTATION: THE KHWARIZMI ALGORITHM 
+# (Binary Search Engine & Data Filtering)
+# ========================================================
+
+display "=================================================="
+display " [ALGORITHM] KHWARIZMI OPTIMIZED SEARCH ENGINE"
+display "=================================================="
+
+# 1. إنشاء جدول البيانات المرتب تصاعدياً (قاعدة بيانات مصغرة)
+list sorted_database
+
+push sorted_database 10
+push sorted_database 25
+push sorted_database 40
+push sorted_database 65
+push sorted_database 90
+push sorted_database 120
+push sorted_database 155
+push sorted_database 200
+
+display "--- Target Sorted Database ---"
+display sorted_database
+
+# 2. تحديد العنصر المراد البحث عنه في قاعدة البيانات
+target = 120
+len sorted_database size
+
+low = 0
+high = size - 1
+found_index = -1
+
+display "Executing Khwarizmi Binary Search for target: 120..."
+
+# 3. محرك الخوارزمية الثنائية عبر الحلقات المتداخلة والشروط الدقيقة
+while low <= high {
+    # حساب نقطة المنتصف يدوياً عبر مفسر 7ABA
+    diff = high - low
+    half_diff = diff / 2
+    mid = low + half_diff
+    
+    val_at_mid = sorted_database[mid]
+    
+    when val_at_mid == target {
+        found_index = mid
+        # إيقاف البحث عبر تجاوز النطاق
+        low = high + 1
+    }
+    otherwise {
+        when val_at_mid < target {
+            low = mid + 1
+        }
+        otherwise {
+            high = mid - 1
+        }
+    }
+}
+
+# 4. عرض النتائج النهائية للخوارزمية
+display "Search Algorithm Finished!"
+display "Target Found at Index Position: " found_index
+
+when found_index != -1 {
+    display "Khwarizmi Verification: SUCCESS - Target located securely."
+}
+otherwise {
+    display "Khwarizmi Verification: FAILED - Target does not exist."
+}
+
+display "=================================================="
+display " KHWARIZMI ALGORITHM EXECUTED FLAWLESSLY IN 7ABA!"
+display "=================================================="
