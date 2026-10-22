@@ -1,0 +1,110 @@
+{
+  "name": "7aba-language-support",
+  "displayName": "7ABA Language Support",
+  "description": "Advanced syntax highlighting, formatting, and indentation support for 7ABA scripts.",
+  "version": "0.3.3",
+  "publisher": "7aba-lang",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/umx0x/7aba-Lang.git"
+  },
+  "license": "MIT",
+  "icon": "images/icon.png",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Formatters"
+  ],
+  "keywords": [
+    "7aba",
+    "7aba-lang",
+    "language",
+    "syntax",
+    "formatter",
+    "indentation"
+  ],
+  "galleryBanner": {
+    "color": "#0B1220",
+    "theme": "dark"
+  },
+  "main": "./out/extension.js",
+  "activationEvents": [
+    "onLanguage:7aba"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "7aba.runFile",
+        "title": "Run 7ABA Code",
+        "icon": "$(play)"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "7aba.runFile",
+          "when": "editorLangId == 7aba",
+          "group": "navigation"
+        }
+      ]
+    },
+    "languages": [
+      {
+        "id": "7aba",
+        "aliases": [
+          "7ABA",
+          "7aba",
+          "7aba-lang"
+        ],
+        "extensions": [
+          ".7ba"
+        ],
+        "configuration": "./language-configuration.json",
+        "mimetypes": [
+          "text/x-7aba"
+        ]
+      }
+    ],
+    "grammars": [
+      {
+        "language": "7aba",
+        "scopeName": "source.7aba",
+        "path": "./syntaxes/7aba.tmLanguage.json"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "7ABA",
+      "properties": {
+        "7aba.formatOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Format 7ABA files automatically when saved."
+        },
+        "7aba.executablePath": {
+          "type": "string",
+          "default": "",
+          "description": "Absolute path to a 7ABA executable. When empty, the bundled Windows executable is used."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "tsc -p ./",
+    "compile": "tsc -p ./",
+    "watch": "tsc -p ./ -w",
+    "test": "npm run compile && node --test"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.30",
+    "@types/vscode": "^1.80.0",
+    "typescript": "^5.4.0"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^8.1.0",
+    "vscode-languageserver": "^8.1.0",
+    "vscode-languageserver-textdocument": "^1.0.15"
+  }
+}

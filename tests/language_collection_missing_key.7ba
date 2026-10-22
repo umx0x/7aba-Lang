@@ -1,0 +1,2 @@
+users = {"existing": 1}
+missing = users["absent"]

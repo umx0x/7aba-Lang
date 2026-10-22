@@ -1,0 +1,29 @@
+result = 0
+
+when 1 == 1 {
+    result = result + 1
+} otherwise {
+    result = result + 100
+}
+
+when 1 == 2 {
+    result = result + 1000
+} otherwise {
+    result = result + 10
+}
+
+when result == 11 {
+    display "WHEN_OTHERWISE_PASS"
+}
+otherwise {
+    display "WHEN_OTHERWISE_FAIL"
+}
+
+when 1 == 1 {
+    result = result + 1
+}
+otherwise {
+    result = result + 100
+}
+
+display "RESULT " result

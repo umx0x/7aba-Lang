@@ -1,0 +1,5 @@
+input person age city score
+display "Person: " person
+display "Age: " age
+display "City: " city
+display "Score: " score

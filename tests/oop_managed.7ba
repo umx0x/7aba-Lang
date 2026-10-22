@@ -1,0 +1,39 @@
+class Entity {
+    field name = "unnamed"
+    field hp = 0
+
+    action init(entity_name, entity_hp) {
+        this.name = entity_name
+        this.hp = entity_hp
+    }
+
+    action damage(target, amount) {
+        target.hp = target.hp - amount
+    }
+
+    action report() {
+        display "ENTITY " this.name " " this.hp
+    }
+}
+
+class Hero extends Entity {
+    field title = "rookie"
+    field companion = 0
+
+    action report() {
+        display "HERO " this.name " " this.hp " " this.title
+    }
+}
+
+hero = new Hero("Ada", 100)
+victim = new Entity("target", 70)
+hero.report()
+hero.damage(victim, 15)
+hero.hp = hero.hp + 2
+alias = hero
+alias.hp = alias.hp + 1
+hero.title = "captain"
+hero.companion = victim
+display "VICTIM_HP " victim.hp
+display "ALIAS_HP " hero.hp
+display hero

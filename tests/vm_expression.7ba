@@ -1,0 +1,115 @@
+list values
+push values 4
+push values 9
+index = 1
+answer = (values[index] + 3) * 2
+negative = -answer + 2
+display values[index]
+
+when answer == 24 {
+    display "BYTECODE_EXPRESSION_PASS"
+}
+otherwise {
+    display "BYTECODE_EXPRESSION_FAIL"
+}
+
+counter = 0
+repeat 3 {
+    counter = counter + 1
+}
+
+when counter == 3 {
+    display "BYTECODE_REPEAT_PASS"
+}
+otherwise {
+    display "BYTECODE_REPEAT_FAIL"
+}
+
+display negative
+
+repeat 0 {
+    negative = 0
+}
+
+loop_count = 0
+while loop_count < 4 {
+    loop_count = loop_count + 1
+}
+
+when loop_count == 4 {
+    display "BYTECODE_WHILE_PASS"
+}
+otherwise {
+    display "BYTECODE_WHILE_FAIL"
+}
+
+when loop_count == 99 {
+    display "BYTECODE_ELSE_FAIL"
+}
+otherwise {
+    display "BYTECODE_ELSE_PASS"
+}
+
+when "alpha" < "beta" {
+    display "BYTECODE_STRING_COMPARE_PASS"
+}
+otherwise {
+    display "BYTECODE_STRING_COMPARE_FAIL"
+}
+
+when true == true {
+    display "BYTECODE_BOOLEAN_COMPARE_PASS"
+}
+otherwise {
+    display "BYTECODE_BOOLEAN_COMPARE_FAIL"
+}
+
+when lower("HeLLo") == "hello" {
+    display "STDLIB_LOWER_PASS"
+}
+otherwise {
+    display "STDLIB_LOWER_FAIL"
+}
+
+when upper("abZ") == "ABZ" {
+    display "STDLIB_UPPER_PASS"
+}
+otherwise {
+    display "STDLIB_UPPER_FAIL"
+}
+
+substring = substr("compiler", 1, 4)
+when substring == "ompi" {
+    display "STDLIB_SUBSTR_PASS"
+}
+otherwise {
+    display "STDLIB_SUBSTR_FAIL"
+}
+
+when len("seven") == 5 {
+    display "STDLIB_STRING_LEN_PASS"
+}
+otherwise {
+    display "STDLIB_STRING_LEN_FAIL"
+}
+
+when abs(-17) == 17 {
+    display "STDLIB_ABS_PASS"
+}
+otherwise {
+    display "STDLIB_ABS_FAIL"
+}
+
+when min(4, 9) == 4 {
+    display "STDLIB_MIN_PASS"
+}
+otherwise {
+    display "STDLIB_MIN_FAIL"
+}
+
+when max(4, 9) == 9 {
+    display "STDLIB_MAX_PASS"
+}
+otherwise {
+    display "STDLIB_MAX_FAIL"
+}

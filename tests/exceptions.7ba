@@ -1,0 +1,26 @@
+action throw_from_action() {
+    throw 9
+}
+
+try {
+    throw 12 / 0
+}
+catch division_error {
+    display division_error
+}
+
+try {
+    throw 17
+}
+catch thrown_value {
+    display thrown_value
+}
+
+try {
+    throw_from_action()
+}
+catch action_error {
+    display action_error
+}
+
+display "EXCEPTIONS_PASS"

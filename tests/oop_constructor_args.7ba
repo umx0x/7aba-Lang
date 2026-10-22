@@ -1,0 +1,33 @@
+class Hero {
+    field name = "unnamed"
+    field hp = 0
+    field level = 0
+    field mana = 0
+
+    action init(hero_name, hero_hp, hero_level, hero_mana) {
+        this.name = hero_name
+        this.hp = hero_hp
+        this.level = hero_level
+        this.mana = hero_mana
+    }
+
+    action strike(target) {
+        target.hp = target.hp - 45
+    }
+}
+
+hero = new Hero("Arthur", 150, 2 + 3, 300)
+target = new Hero("Training Dummy", 80 + 20, 1, 0)
+hero.strike(target)
+alias_name = "Lancelot"
+alias_hero = new Hero(alias_name, 90, 4, 25)
+property_copy = alias_hero.name
+
+display hero.name
+display hero.hp
+display hero.level
+display hero.mana
+display target.name
+display target.hp
+display alias_hero.name
+display "PROPERTY_STRING_COPY_PASS " property_copy

@@ -1,0 +1,7 @@
+action echo(value) {
+    display value
+}
+
+message = "VALUE_STACK_VARIABLE_PASS"
+echo(message)
+echo("VALUE_STACK_LITERAL_PASS")

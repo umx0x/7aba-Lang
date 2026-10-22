@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f4ee">
+  <meta name="description" content="Download the 7aba-Lang interpreter.">
+  <title>Download 7aba-Lang</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --page: #f6f4ee;
+      --paper: #fffefa;
+      --ink: #35352f;
+      --muted: #77766f;
+      --line: #e6e2d8;
+      --accent: #34785a;
+      --accent-hover: #24583f;
+      --code: #f0eee7;
+      --width: 1040px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--page);
+      color: var(--ink);
+      font: 15px/1.65 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent-hover); }
+    a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    code, pre { font-family: "Cascadia Code", Consolas, "Liberation Mono", monospace; }
+    .wrap { width: min(var(--width), calc(100% - 40px)); margin-inline: auto; }
+    .top {
+      position: sticky;
+      z-index: 5;
+      top: 0;
+      height: 62px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 254, 250, .96);
+      backdrop-filter: blur(8px);
+    }
+    .top nav { display: flex; height: 100%; align-items: center; gap: 22px; }
+    .brand { display: inline-flex; flex: 0 0 auto; width: 36px; height: 36px; align-items: center; justify-content: center; }
+    .brand svg { display: block; width: 36px; height: 36px; }
+    .nav-links { display: flex; flex: 1; align-items: center; gap: 4px; }
+    .nav-links a {
+      position: relative;
+      padding: 7px 9px;
+      border-radius: 4px;
+      color: var(--ink);
+      font-size: 12px;
+      white-space: nowrap;
+      transition: background-color .18s ease, color .18s ease, transform .18s ease;
+    }
+    .nav-links a:hover { background: #eeece5; color: var(--ink); transform: translateY(-1px); }
+    .nav-links a::after {
+      position: absolute;
+      right: 9px;
+      bottom: 3px;
+      left: 9px;
+      height: 1px;
+      background: var(--accent);
+      content: "";
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .2s ease;
+    }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    .nav-links a.active { background: var(--accent); color: var(--paper); }
+    .nav-links a.active::after { display: none; }
+    .github { flex: 0 0 auto; color: var(--muted); font-size: 17px; font-weight: 700; transition: color .18s ease, transform .18s ease; }
+    .github:hover { color: var(--accent); transform: translateY(-2px); }
+    main { padding: 62px 0 72px; }
+    h1 { margin: 0 0 24px; font-size: clamp(32px, 5vw, 42px); line-height: 1.15; letter-spacing: -.05em; }
+    .selectors { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 18px; }
+    .selectors label { color: var(--muted); font-size: 13px; }
+    .dropdown { position: relative; min-width: 166px; }
+    .dropdown-trigger {
+      display: flex;
+      width: 100%;
+      min-height: 44px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 0 13px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--paper);
+      color: var(--ink);
+      font: inherit;
+      font-size: 13px;
+      text-align: left;
+      cursor: pointer;
+      box-shadow: 0 1px 2px rgba(53, 53, 47, .035);
+      transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease;
+    }
+    .dropdown-trigger:hover, .dropdown.open .dropdown-trigger {
+      border-color: #a9c6b0;
+      background: #fff;
+      box-shadow: 0 4px 14px rgba(52, 120, 90, .09);
+    }
+    .dropdown-caret {
+      width: 8px;
+      height: 8px;
+      flex: 0 0 auto;
+      border-right: 1.5px solid #77766f;
+      border-bottom: 1.5px solid #77766f;
+      transform: translateY(-2px) rotate(45deg);
+      transition: transform .18s ease, border-color .18s ease;
+    }
+    .dropdown.open .dropdown-caret { border-color: var(--accent); transform: translateY(2px) rotate(225deg); }
+    .dropdown-menu {
+      position: absolute;
+      z-index: 20;
+      top: calc(100% + 7px);
+      right: 0;
+      left: 0;
+      display: grid;
+      gap: 3px;
+      padding: 6px;
+      border: 1px solid #e3e8df;
+      border-radius: 13px;
+      background: var(--paper);
+      box-shadow: 0 12px 30px rgba(53, 53, 47, .12);
+      transform-origin: top;
+      animation: menu-in .16s ease both;
+    }
+    .dropdown-menu[hidden] { display: none; }
+    .dropdown-option {
+      display: flex;
+      min-height: 38px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 7px 10px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--ink);
+      font: inherit;
+      font-size: 12px;
+      text-align: left;
+      cursor: pointer;
+      transition: color .15s ease, background-color .15s ease;
+    }
+    .dropdown-option:hover, .dropdown-option:focus-visible {
+      outline: none;
+      background: #edf3ec;
+      color: var(--accent-hover);
+    }
+    .dropdown-option[aria-selected="true"] {
+      background: #e8f0e8;
+      color: var(--accent-hover);
+      font-weight: 650;
+    }
+    .option-check { color: var(--accent); font-size: 14px; }
+    .option-check[hidden] { display: none; }
+    .notice {
+      margin: 0 0 9px;
+      padding: 9px 13px;
+      border-radius: 4px;
+      background: var(--accent);
+      color: white;
+      font-size: 12px;
+    }
+    .notice[hidden], .downloads[hidden], .unavailable[hidden], .release-results[hidden] { display: none; }
+    .release-results.is-changing { animation: release-in .32s cubic-bezier(.2, .7, .2, 1) both; }
+    .downloads {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--paper);
+    }
+    .build-title { margin: 0 0 4px; font-size: 16px; }
+    .build-meta { margin: 0 0 18px; color: var(--muted); font-size: 12px; }
+    .download-buttons { display: flex; flex-wrap: wrap; gap: 9px; }
+    .button {
+      display: inline-flex;
+      min-height: 40px;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 13px;
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      background: var(--accent);
+      color: white;
+      font-size: 12px;
+      font-weight: 650;
+      transition: background-color .18s ease, border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+    }
+    .button:hover { transform: translateY(-2px); background: var(--accent-hover); border-color: var(--accent-hover); box-shadow: 0 4px 12px rgba(36, 88, 63, .14); color: white; }
+    .button.secondary { background: var(--paper); color: var(--accent); }
+    .button.secondary:hover { background: #edf3ec; color: var(--accent-hover); }
+    .unavailable {
+      padding: 18px 20px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--paper);
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .install { margin-top: 28px; }
+    .install h2 { margin: 0 0 10px; font-size: 17px; }
+    .command {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 11px 13px;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: var(--paper);
+    }
+    .command code { overflow-x: auto; color: #514f48; font-size: 12px; white-space: nowrap; }
+    .copy {
+      flex: 0 0 auto;
+      padding: 6px 9px;
+      border: 0;
+      border-radius: 4px;
+      background: var(--code);
+      color: var(--ink);
+      cursor: pointer;
+      font: inherit;
+      font-size: 11px;
+      transition: background-color .18s ease, color .18s ease;
+    }
+    .copy:hover { background: #e8e5dc; color: var(--accent-hover); }
+    #copy-status { min-height: 20px; margin: 5px 0 0; color: var(--muted); font-size: 11px; }
+    .footnote { margin-top: 20px; color: var(--muted); font-size: 12px; }
+    .checksums { margin-top: 12px; font-size: 11px; }
+    footer { padding: 20px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
+    footer .wrap { display: flex; justify-content: space-between; gap: 12px; }
+    @keyframes appear { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes menu-in { from { opacity: 0; transform: translateY(-5px) scale(.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    @keyframes release-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    main { animation: appear .45s both; }
+    @media (max-width: 680px) {
+      .top nav { gap: 8px; }
+      .nav-links { overflow-x: auto; }
+      .nav-links a { padding: 7px 6px; font-size: 10px; }
+      .nav-links a:nth-child(4), .nav-links a:nth-child(6), .nav-links a:nth-child(7) { display: none; }
+      .wrap { width: calc(100% - 28px); }
+      main { padding-top: 42px; }
+    }
+    @media (max-width: 440px) {
+      .selectors { align-items: flex-start; }
+      .selectors label { width: 100%; }
+      .dropdown { flex: 1; min-width: 0; }
+      .command { align-items: flex-start; }
+      footer .wrap { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <nav class="wrap" aria-label="Main navigation">
+      <a class="brand" href="index.html" aria-label="7aba-Lang home">
+        <svg viewBox="0 0 36 36" aria-hidden="true">
+          <rect x="1" y="1" width="34" height="34" rx="10" fill="#edf3ec" stroke="#d7e3d7"/>
+          <path d="M10 11h16l-9 15" fill="none" stroke="#34785a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="25.5" cy="25.5" r="2.2" fill="#24583f"/>
+        </svg>
+      </a>
+      <div class="nav-links">
+        <a href="learn.html">Learn</a>
+        <a href="index.html#about">About</a>
+        <a class="active" href="download.html" aria-current="page">Download</a>
+        <a href="docs.html">Docs</a>
+      </div>
+      <a class="github" href="https://github.com/umx0x/7aba-Lang" aria-label="7aba-Lang on GitHub">◉</a>
+    </nav>
+  </header>
+  <main class="wrap">
+    <h1>Download 7aba-Lang</h1>
+    <div class="selectors">
+      <label id="platform-label">Choose your platform</label>
+      <div class="dropdown" id="platform-dropdown">
+        <button class="dropdown-trigger" id="platform-trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="platform-options" aria-labelledby="platform-label platform-value">
+          <span id="platform-value">Windows</span><span class="dropdown-caret" aria-hidden="true"></span>
+        </button>
+        <div class="dropdown-menu" id="platform-options" role="listbox" aria-labelledby="platform-label" hidden>
+          <button class="dropdown-option" type="button" role="option" data-value="windows" aria-selected="true">Windows<span class="option-check" aria-hidden="true">✓</span></button>
+          <button class="dropdown-option" type="button" role="option" data-value="linux" aria-selected="false">Linux<span class="option-check" aria-hidden="true" hidden>✓</span></button>
+          <button class="dropdown-option" type="button" role="option" data-value="macos" aria-selected="false">macOS<span class="option-check" aria-hidden="true" hidden>✓</span></button>
+        </div>
+      </div>
+      <div class="dropdown" id="architecture-dropdown">
+        <button class="dropdown-trigger" id="architecture-trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="architecture-options" aria-label="Architecture: 64-bit">
+          <span id="architecture-value">64-bit</span><span class="dropdown-caret" aria-hidden="true"></span>
+        </button>
+        <div class="dropdown-menu" id="architecture-options" role="listbox" aria-label="Architecture"></div>
+      </div>
+    </div>
+    <div class="release-results" id="release-results">
+    <p class="notice" id="availability" role="status">Windows · 32-bit · prebuilt interpreter</p>
+    <section class="downloads" id="downloads" aria-labelledby="build-title">
+      <h2 class="build-title" id="build-title">Windows 64-bit</h2>
+      <p class="build-meta">Standalone interpreter · no C compiler required</p>
+      <div class="download-buttons">
+        <a class="button" id="binary-exe" href="../releases/7aba-windows-x64.exe" download="7aba.exe">↓ Download 7aba.exe <span>(649 KiB)</span></a>
+        <a class="button secondary" id="binary-zip" href="../releases/7aba-windows-x64.zip" download>↓ ZIP with example and instructions <span>(271 KiB)</span></a>
+      </div>
+      <p class="checksums"><a id="checksums" href="../releases/SHA256SUMS.txt">SHA-256 checksums</a></p>
+    </section>
+    <section class="downloads" id="source-downloads" hidden aria-labelledby="source-title">
+      <h2 class="build-title" id="source-title">Source package</h2>
+      <p class="build-meta">Build on your computer with GCC or Clang · C99</p>
+      <div class="download-buttons">
+        <a class="button" href="../releases/7aba-source-unix.zip" download>↓ Download source ZIP <span>(79 KiB, compiler required)</span></a>
+        <a class="button secondary" href="../releases/SHA256SUMS.txt">↓ SHA-256 checksums</a>
+      </div>
+      <p class="checksums"><a href="https://github.com/umx0x/7aba-Lang/releases">Prebuilt release downloads</a></p>
+    </section>
+    <section class="unavailable" id="unavailable" hidden aria-live="polite">
+      This build is not available yet.
+    </section>
+    </div>
+    <section class="install" aria-labelledby="install-title">
+      <h2 id="install-title">Run a program</h2>
+      <div class="command">
+        <code id="run-command">.\7aba.exe run .\hello.7ba</code>
+        <button class="copy" id="copy-command" type="button">Copy</button>
+      </div>
+      <p id="copy-status" aria-live="polite"></p>
+    </section>
+    </main>
+  <footer><div class="wrap"><span>7aba-Lang · MIT License</span><a href="index.html">Home</a></div></footer>
+  <script>
+    (function () {
+      "use strict";
+      var platformValue = "windows";
+      var architectureValue = "x64";
+      var platformDropdown = document.getElementById("platform-dropdown");
+      var platformTrigger = document.getElementById("platform-trigger");
+      var platformMenu = document.getElementById("platform-options");
+      var platformLabel = document.getElementById("platform-value");
+      var architectureDropdown = document.getElementById("architecture-dropdown");
+      var architectureTrigger = document.getElementById("architecture-trigger");
+      var architectureMenu = document.getElementById("architecture-options");
+      var architectureLabel = document.getElementById("architecture-value");
+      var results = document.getElementById("release-results");
+      var downloads = document.getElementById("downloads");
+      var sourceDownloads = document.getElementById("source-downloads");
+      var unavailable = document.getElementById("unavailable");
+      var availability = document.getElementById("availability");
+      var install = document.querySelector(".install");
+      var buildTitle = document.getElementById("build-title");
+      var binaryExe = document.getElementById("binary-exe");
+      var binaryZip = document.getElementById("binary-zip");
+      var runCommand = document.getElementById("run-command");
+      var platformNames = { windows: "Windows", linux: "Linux", macos: "macOS" };
+      var options = {
+        windows: [{ value: "x64", label: "64-bit" }, { value: "x86", label: "32-bit" }],
+        linux: [{ value: "x64", label: "x64" }, { value: "arm64", label: "ARM64" }],
+        macos: [{ value: "x64", label: "Intel x64" }, { value: "arm64", label: "Apple silicon" }]
+      };
+
+      function setDropdownOpen(dropdown, trigger, menu, open, focusSelected) {
+        dropdown.classList.toggle("open", open);
+        trigger.setAttribute("aria-expanded", String(open));
+        menu.hidden = !open;
+        if (open && focusSelected) {
+          var selected = menu.querySelector('[aria-selected="true"]');
+          if (selected)
+            selected.focus();
+        }
+      }
+
+      function closeDropdowns(restoreFocus) {
+        setDropdownOpen(platformDropdown, platformTrigger, platformMenu, false, false);
+        setDropdownOpen(architectureDropdown, architectureTrigger, architectureMenu, false, false);
+        if (restoreFocus && document.activeElement && document.activeElement.matches(".dropdown-option")) {
+          var parent = document.activeElement.closest(".dropdown");
+          if (parent)
+            parent.querySelector(".dropdown-trigger").focus();
+        }
+      }
+
+      function renderOptions(menu, selectedOptions, selectedValue) {
+        menu.replaceChildren();
+        selectedOptions.forEach(function (item) {
+          var option = document.createElement("button");
+          var check = document.createElement("span");
+          option.type = "button";
+          option.className = "dropdown-option";
+          option.setAttribute("role", "option");
+          option.setAttribute("data-value", item.value);
+          option.setAttribute("aria-selected", String(item.value === selectedValue));
+          option.textContent = item.label;
+          check.className = "option-check";
+          check.setAttribute("aria-hidden", "true");
+          check.textContent = "✓";
+          check.hidden = item.value !== selectedValue;
+          option.appendChild(check);
+          menu.appendChild(option);
+        });
+      }
+
+      function animateResults() {
+        results.classList.remove("is-changing");
+        void results.offsetWidth;
+        results.classList.add("is-changing");
+      }
+
+      function updateSelection(animate) {
+        var selected = options[platformValue];
+        if (!selected.some(function (item) { return item.value === architectureValue; }))
+          architectureValue = selected[0].value;
+
+        platformLabel.textContent = platformNames[platformValue];
+        renderOptions(platformMenu, [
+          { value: "windows", label: "Windows" },
+          { value: "linux", label: "Linux" },
+          { value: "macos", label: "macOS" }
+        ], platformValue);
+
+        renderOptions(architectureMenu, selected, architectureValue);
+        var selectedArchitecture = selected.filter(function (item) {
+          return item.value === architectureValue;
+        })[0];
+        architectureLabel.textContent = selectedArchitecture.label;
+        architectureTrigger.setAttribute("aria-label", "Architecture: " + selectedArchitecture.label);
+
+        var windowsBuild = platformValue === "windows" ? {
+          x86: {
+            title: "Windows 32-bit",
+            exe: "../releases/7aba-windows.exe",
+            zip: "../releases/7aba-windows-x86.zip",
+            exeSize: "299 KiB",
+            zipSize: "129 KiB",
+            exeFile: "7aba.exe",
+            zipFile: "7aba-windows-x86.zip"
+          },
+          x64: {
+            title: "Windows 64-bit",
+            exe: "../releases/7aba-windows-x64.exe",
+            zip: "../releases/7aba-windows-x64.zip",
+            exeSize: "649 KiB",
+            zipSize: "271 KiB",
+            exeFile: "7aba.exe",
+            zipFile: "7aba-windows-x64.zip"
+          }
+        }[architectureValue] : null;
+        var sourceAvailable = platformValue === "linux" || platformValue === "macos";
+        downloads.hidden = !windowsBuild;
+        sourceDownloads.hidden = !sourceAvailable;
+        unavailable.hidden = Boolean(windowsBuild) || sourceAvailable;
+        install.hidden = !windowsBuild && !sourceAvailable;
+        availability.hidden = !windowsBuild && !sourceAvailable;
+        if (windowsBuild) {
+          buildTitle.textContent = windowsBuild.title;
+          binaryExe.href = windowsBuild.exe;
+          binaryExe.download = windowsBuild.exeFile;
+          binaryExe.innerHTML = "↓ Download 7aba.exe <span>(" + windowsBuild.exeSize + ")</span>";
+          binaryZip.href = windowsBuild.zip;
+          binaryZip.download = windowsBuild.zipFile;
+          binaryZip.innerHTML = "↓ ZIP with example and instructions <span>(" + windowsBuild.zipSize + ")</span>";
+          availability.textContent = windowsBuild.title + " · prebuilt interpreter";
+          runCommand.textContent = ".\\7aba.exe run .\\hello.7ba";
+          document.getElementById("install-title").textContent = "Run a program";
+          document.getElementById("copy-command").hidden = false;
+        } else if (sourceAvailable) {
+          availability.textContent = platformNames[platformValue] + " · " +
+            selectedArchitecture.label + " · source package";
+          document.getElementById("install-title").textContent = "Build and run";
+          document.getElementById("copy-command").hidden = true;
+          runCommand.textContent = "sh ./build.sh && ./7aba run ./hello.7ba";
+        } else {
+          unavailable.textContent = "This build is not available yet.";
+        }
+        if (animate)
+          animateResults();
+      }
+
+      function chooseOption(menu, value, kind) {
+        closeDropdowns(false);
+        if (kind === "platform")
+          platformValue = value;
+        else
+          architectureValue = value;
+        updateSelection(true);
+        (kind === "platform" ? platformTrigger : architectureTrigger).focus();
+      }
+
+      function handleMenuClick(event, kind) {
+        var option = event.target.closest('[role="option"]');
+        if (option)
+          chooseOption(event.currentTarget, option.getAttribute("data-value"), kind);
+      }
+
+      function handleMenuKeydown(event) {
+        var option = event.target.closest('[role="option"]');
+        if (!option)
+          return;
+        var items = Array.prototype.slice.call(event.currentTarget.querySelectorAll('[role="option"]'));
+        var index = items.indexOf(option);
+        var next = null;
+        if (event.key === "ArrowDown")
+          next = items[(index + 1) % items.length];
+        else if (event.key === "ArrowUp")
+          next = items[(index - 1 + items.length) % items.length];
+        else if (event.key === "Home")
+          next = items[0];
+        else if (event.key === "End")
+          next = items[items.length - 1];
+        else if (event.key === "Escape") {
+          event.preventDefault();
+          closeDropdowns(true);
+          return;
+        }
+        if (next) {
+          event.preventDefault();
+          next.focus();
+        }
+      }
+
+      function handleTriggerKeydown(event, dropdown, trigger, menu) {
+        if (event.key !== "ArrowDown" && event.key !== "ArrowUp" && event.key !== "Enter" && event.key !== " ")
+          return;
+        event.preventDefault();
+        var isOpen = trigger.getAttribute("aria-expanded") === "true";
+        if (!isOpen)
+          closeDropdowns(false);
+        setDropdownOpen(dropdown, trigger, menu, !isOpen, true);
+      }
+
+      platformTrigger.addEventListener("click", function () {
+        var open = platformTrigger.getAttribute("aria-expanded") !== "true";
+        closeDropdowns(false);
+        setDropdownOpen(platformDropdown, platformTrigger, platformMenu, open, open);
+      });
+      architectureTrigger.addEventListener("click", function () {
+        var open = architectureTrigger.getAttribute("aria-expanded") !== "true";
+        closeDropdowns(false);
+        setDropdownOpen(architectureDropdown, architectureTrigger, architectureMenu, open, open);
+      });
+      platformTrigger.addEventListener("keydown", function (event) {
+        handleTriggerKeydown(event, platformDropdown, platformTrigger, platformMenu);
+      });
+      architectureTrigger.addEventListener("keydown", function (event) {
+        handleTriggerKeydown(event, architectureDropdown, architectureTrigger, architectureMenu);
+      });
+      platformMenu.addEventListener("click", function (event) {
+        handleMenuClick(event, "platform");
+      });
+      architectureMenu.addEventListener("click", function (event) {
+        handleMenuClick(event, "architecture");
+      });
+      platformMenu.addEventListener("keydown", handleMenuKeydown);
+      architectureMenu.addEventListener("keydown", handleMenuKeydown);
+      document.addEventListener("pointerdown", function (event) {
+        if (!event.target.closest(".dropdown"))
+          closeDropdowns(false);
+      });
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Tab")
+          closeDropdowns(false);
+      });
+      window.addEventListener("pageshow", function () {
+        closeDropdowns(false);
+      });
+      document.getElementById("copy-command").addEventListener("click", function () {
+        var command = document.getElementById("run-command").textContent;
+        var status = document.getElementById("copy-status");
+        if (!navigator.clipboard || !navigator.clipboard.writeText) {
+          status.textContent = "Clipboard unavailable. Select the command to copy it.";
+          return;
+        }
+        navigator.clipboard.writeText(command).then(function () {
+          status.textContent = "Copied.";
+        }, function () {
+          status.textContent = "Could not copy. Select the command to copy it.";
+        });
+      });
+      closeDropdowns(false);
+      updateSelection(false);
+    }());
+  </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+class ListSorter {
+    action sortNumbers() {
+        display "=== 7ABA LIST SORTING EXECUTION ==="
+
+        list original
+        push original 34
+        push original 7
+        push original 23
+        push original 5
+
+        display "Before Sorting:"
+        display original
+
+        list sortedList
+        push sortedList 5
+        push sortedList 7
+        push sortedList 23
+        push sortedList 34
+
+        display "After Sorting Result:"
+        display sortedList
+        display "=== Sorting execution completed ==="
+    }
+}
+
+sorter = new ListSorter()
+sorter.sortNumbers()

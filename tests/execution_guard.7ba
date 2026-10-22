@@ -1,0 +1,9 @@
+counter = 0
+repeat 20 {
+    repeat 20 {
+        repeat 20 {
+            counter = counter + 1
+        }
+    }
+}
+display "GUARD_RETURNED"

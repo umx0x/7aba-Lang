@@ -1,0 +1,36 @@
+run_count = run_count + 1
+
+when run_count == 1 {
+    list values
+    push values 7
+    push values -12
+    list empty_values
+
+    pile history
+    push history 10
+    push history 20
+    push history 30
+    push history 50
+    push history 800
+    pile empty_pile
+
+    matrix grid 2 3
+    matrix_set grid 0 0 1
+    matrix_set grid 0 2 3
+    matrix_set grid 1 1 5
+
+    queue jobs
+    enqueue jobs 31
+    enqueue jobs 42
+    queue empty_queue
+}
+otherwise {
+    display values
+    display empty_values
+    display history
+    display empty_pile
+    display grid
+    display jobs
+    display empty_queue
+    file_display "tests/display_file.txt"
+}

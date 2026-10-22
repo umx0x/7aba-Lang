@@ -1,0 +1,17 @@
+# C build outputs
+/*.o
+/7aba
+/7aba.exe
+/tests/*.exe
+/tests/*.o
+/tests/ffi_fixture.dll
+/tests/ffi_fixture.so
+
+# Runtime state is user/program data, not source
+*.state
+
+# Local development dependencies and generated extension output
+/.venv/
+/vscode-extension/node_modules/
+/vscode-extension/out/
+/vscode-extension/*.vsix

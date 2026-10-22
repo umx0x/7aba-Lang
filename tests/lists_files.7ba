@@ -1,0 +1,32 @@
+run_count = run_count + 1
+
+when run_count == 1 {
+    list values
+    push values 7
+    push values -12
+    push values 2 + 3 * 4
+    pile history
+    push history 9
+    push history 10
+    pop history
+    list mixed
+    push mixed "managed string"
+    push mixed true
+    len mixed mixed_count
+    save values "tests/list values.txt"
+    load restored "tests/list values.txt"
+    len restored restored_count
+    message = "file I/O"
+    file_write "tests/data file.txt" message overwrite
+    file_write "tests/data file.txt" restored_count append
+    file_read "tests/data file.txt" file_contents
+    display "LISTS_SETUP " file_contents
+}
+otherwise {
+    display values
+    display history
+    display restored
+    display "VALUE_INDEX " values[2]
+    display "VALUE_LENGTH " restored_count
+    file_display "tests/data file.txt"
+}

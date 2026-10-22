@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f4ee">
+  <meta name="description" content="Download the 7aba-Lang interpreter for Windows.">
+  <title>7aba-Lang</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --page: #f6f4ee;
+      --paper: #fffefa;
+      --ink: #35352f;
+      --muted: #77766f;
+      --line: #e6e2d8;
+      --accent: #34785a;
+      --accent-hover: #24583f;
+      --code: #f0eee7;
+      --width: 980px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--page);
+      color: var(--ink);
+      font: 16px/1.6 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent-hover); }
+    a:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+    code, pre { font-family: "Cascadia Code", Consolas, "Liberation Mono", monospace; }
+    .wrap { width: min(var(--width), calc(100% - 40px)); margin-inline: auto; }
+
+    .top {
+      height: 68px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 254, 250, .75);
+    }
+    .nav {
+      display: flex;
+      height: 100%;
+      align-items: center;
+      gap: 26px;
+    }
+    .brand { display: inline-flex; flex: 0 0 auto; width: 36px; height: 36px; align-items: center; justify-content: center; animation: fade-down .45s both; }
+    .brand svg { display: block; width: 36px; height: 36px; }
+    .nav-items { display: flex; flex: 1; align-items: center; gap: 7px; }
+    .nav-items a {
+      position: relative;
+      padding: 7px 11px;
+      border-radius: 4px;
+      color: var(--ink);
+      font-size: 12px;
+      white-space: nowrap;
+      transition: color .18s ease, background-color .18s ease, transform .18s ease;
+      animation: fade-down .4s both;
+    }
+    .nav-items a:hover { background: #eeece5; color: var(--ink); }
+    .nav-items a:not(.active)::after {
+      position: absolute;
+      right: 11px;
+      bottom: 3px;
+      left: 11px;
+      height: 1px;
+      background: var(--accent);
+      content: "";
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .2s ease;
+    }
+    .nav-items a:hover { transform: translateY(-1px); }
+    .nav-items a:not(.active):hover::after { transform: scaleX(1); }
+    .nav-items a.active { background: var(--accent); color: #fffefa; }
+    .nav-items a:nth-child(2) { animation-delay: .03s; }
+    .nav-items a:nth-child(3) { animation-delay: .06s; }
+    .nav-items a:nth-child(4) { animation-delay: .09s; }
+    .nav-items a:nth-child(5) { animation-delay: .12s; }
+    .nav-items a:nth-child(6) { animation-delay: .15s; }
+    .nav-items a:nth-child(7) { animation-delay: .18s; }
+    .nav-items a.external-nav { color: var(--muted); }
+    .nav-search {
+      display: flex;
+      width: 190px;
+      height: 34px;
+      align-items: center;
+      gap: 7px;
+      padding: 0 9px;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: var(--paper);
+    }
+    .nav-search span { color: var(--muted); font-size: 14px; }
+    .nav-search input {
+      width: 100%;
+      min-width: 0;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--ink);
+      font: inherit;
+      font-size: 11px;
+    }
+    .nav-search input::placeholder { color: #99978f; }
+    .nav-github { color: var(--muted); font-size: 18px; font-weight: 700; }
+    .nav-github { transition: color .18s ease, transform .18s ease; }
+    .nav-github:hover { color: var(--accent); transform: translateY(-2px); }
+
+    .hero { padding: 83px 0 67px; }
+    .hero-section { border: 0; }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr .83fr;
+      align-items: center;
+      gap: 72px;
+    }
+    .eyebrow {
+      margin-bottom: 14px;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    h1 {
+      max-width: 560px;
+      margin: 0 0 16px;
+      font-size: clamp(42px, 6vw, 66px);
+      line-height: 1.06;
+      letter-spacing: -.065em;
+    }
+    .intro { max-width: 490px; margin: 0 0 24px; color: var(--muted); font-size: 16px; }
+    .download {
+      display: inline-flex;
+      min-height: 48px;
+      align-items: center;
+      gap: 12px;
+      padding: 0 19px;
+      border-radius: 5px;
+      background: var(--accent);
+      color: #fffaf3;
+      font-size: 14px;
+      font-weight: 700;
+      transition: background-color .18s ease, box-shadow .18s ease, transform .18s ease;
+    }
+    .download:hover { background: var(--accent-hover); color: #fffaf3; box-shadow: 0 5px 14px rgba(36, 88, 63, .16); transform: translateY(-2px); }
+    .download small { font-size: 17px; font-weight: 400; }
+    .download-info { margin: 10px 0 0; color: var(--muted); font-size: 11px; }
+
+    .sample {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: var(--paper);
+    }
+    .sample-title {
+      padding: 10px 15px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font: 11px ui-monospace, monospace;
+    }
+    pre {
+      overflow-x: auto;
+      margin: 0;
+      padding: 18px;
+      color: #525148;
+      font-size: 12px;
+      line-height: 1.85;
+    }
+    .kw { color: #825c91; }
+    .fn { color: var(--accent); }
+    .str { color: var(--accent); }
+    .num { color: #a06c27; }
+
+    section { padding: 52px 0; border-top: 1px solid var(--line); }
+    h2 { margin: 0 0 20px; font-size: 25px; letter-spacing: -.04em; }
+    .download-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 21px 23px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--paper);
+    }
+    .download-card h3 { margin: 0 0 3px; font-size: 15px; }
+    .download-card p { margin: 0; color: var(--muted); font-size: 12px; }
+    .text-link { flex: 0 0 auto; font-size: 13px; font-weight: 700; }
+    .docs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .doc-card {
+      display: block;
+      min-height: 130px;
+      padding: 17px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--paper);
+      color: var(--ink);
+      transition: border-color .18s ease, color .18s ease, transform .18s ease, box-shadow .18s ease;
+    }
+    .doc-card:hover { border-color: #b5c9b7; color: var(--ink); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(53, 53, 47, .06); }
+    .doc-card h3 { margin: 0 0 5px; font-size: 14px; }
+    .doc-card p { margin: 0; color: var(--muted); font-size: 12px; }
+    .doc-card span { display: inline-block; margin-top: 11px; color: var(--accent); font-size: 11px; font-weight: 700; }
+    .command {
+      margin-top: 14px;
+      padding: 13px 16px;
+      border-radius: 5px;
+      background: var(--code);
+      color: #525148;
+      font-size: 12px;
+      white-space: pre-wrap;
+    }
+    .modules {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .modules li {
+      padding: 5px 9px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: var(--paper);
+      color: #66645c;
+      font: 11px ui-monospace, monospace;
+    }
+    .display-note {
+      margin-top: 14px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: var(--paper);
+      color: #66645c;
+      font-size: 12px;
+    }
+
+    footer { padding: 22px 0 28px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
+    .footer { display: flex; justify-content: space-between; gap: 16px; }
+    @media (max-width: 720px) {
+      .nav { gap: 12px; }
+      .nav-items { gap: 1px; overflow-x: auto; }
+      .nav-items a { padding: 7px 8px; font-size: 11px; }
+      .nav-search { width: 130px; }
+      .nav-items a.external-nav { display: none; }
+      .hero { padding: 55px 0 43px; }
+      .hero-grid { grid-template-columns: 1fr; gap: 30px; }
+      .intro { font-size: 15px; }
+      section { padding: 40px 0; }
+    }
+    @media (max-width: 480px) {
+      .wrap { width: min(var(--width), calc(100% - 30px)); }
+      .nav-search { display: none; }
+      .nav { justify-content: space-between; }
+      .nav-items { flex: 0 1 auto; }
+      .download-card, .footer { align-items: flex-start; flex-direction: column; }
+      .text-link { margin-top: 2px; }
+      .docs-grid { grid-template-columns: 1fr; }
+    }
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero { animation: fade-up .65s both; }
+    section:not(.hero) { animation: fade-up .6s both; }
+    section:nth-of-type(2) { animation-delay: .08s; }
+    section:nth-of-type(3) { animation-delay: .14s; }
+    section:nth-of-type(4) { animation-delay: .2s; }
+    section:nth-of-type(5) { animation-delay: .26s; }
+    @keyframes fade-down {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="top" id="top">
+    <nav class="nav wrap" aria-label="Main navigation">
+      <a class="brand" href="#top" aria-label="7aba-Lang home">
+        <svg viewBox="0 0 36 36" aria-hidden="true">
+          <rect x="1" y="1" width="34" height="34" rx="10" fill="#edf3ec" stroke="#d7e3d7"/>
+          <path d="M10 11h16l-9 15" fill="none" stroke="#34785a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="25.5" cy="25.5" r="2.2" fill="#24583f"/>
+        </svg>
+      </a>
+      <div class="nav-items">
+        <a href="learn.html">Learn</a>
+        <a href="#about">About</a>
+        <a href="download.html">Download</a>
+        <a class="external-nav" href="https://github.com/umx0x/7aba-Lang/commits/main/">Blog</a>
+        <a href="docs.html">Docs</a>
+        <a href="docs.html#language">Beta Docs ↗</a>
+        <a class="external-nav" href="https://github.com/umx0x/7aba-Lang">Contribute ↗</a>
+      </div>
+      <form class="nav-search" action="learn.html" method="get" role="search">
+        <span aria-hidden="true">⌕</span>
+        <input type="search" name="q" placeholder="Start typing..." aria-label="Search learning guide">
+      </form>
+      <a class="nav-github" href="https://github.com/umx0x/7aba-Lang" aria-label="7aba-Lang on GitHub">◉</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero hero-section" id="about">
+      <div class="wrap hero-grid">
+        <div>
+          <p class="eyebrow">A programming language and interpreter</p>
+          <h1>Meet 7aba-Lang.</h1>
+          <p class="intro">A small experimental language with a C99 bytecode interpreter.</p>
+          <a class="download" href="download.html">
+            <small aria-hidden="true">↓</small>             Download for Windows (32-bit)
+          </a>
+          <p class="download-info">Windows · 32-bit and 64-bit builds</p>
+        </div>
+        <div class="sample" aria-label="7aba-Lang code sample">
+          <div class="sample-title">hello.7ba</div>
+          <pre><span class="kw">action</span> greet(name) {
+    <span class="kw">display</span> <span class="str">"Hello, "</span> name
+}
+
+greet(<span class="str">"world"</span>)
+
+message = <span class="fn">replace</span>(<span class="str">"hello language"</span>, <span class="str">"language"</span>, <span class="str">"7aba"</span>)</pre>
+        </div>
+      </div>
+    </section>
+
+    <section id="download">
+      <div class="wrap">
+        <h2>Download the interpreter</h2>
+        <div class="download-card">
+          <div>
+            <h3>Windows</h3>
+            <p>Standalone interpreters · 32-bit and 64-bit</p>
+          </div>
+          <a class="text-link" href="download.html">Choose a download ↓</a>
+        </div>
+        <div class="command">7aba run your-file.7ba</div>
+      </div>
+    </section>
+
+    <section id="docs">
+      <div class="wrap">
+        <h2>Documentation</h2>
+        <div class="docs-grid">
+          <a class="doc-card" href="docs.html#install">
+            <h3>Getting started</h3>
+            <p>Download the interpreter and run your first program.</p>
+            <span>Open guide →</span>
+          </a>
+          <a class="doc-card" href="docs.html#language">
+            <h3>Language reference</h3>
+            <p>Syntax, values, control flow, built-ins, and current limitations.</p>
+            <span>Browse reference →</span>
+          </a>
+          <a class="doc-card" href="docs.html#architecture">
+            <h3>Architecture</h3>
+            <p>VM, runtime, managed values, collections, and implementation status.</p>
+            <span>Browse architecture →</span>
+          </a>
+          <a class="doc-card" href="docs.html#editor">
+            <h3>VS Code</h3>
+            <p>Install and use syntax highlighting and language support.</p>
+            <span>Open editor guide →</span>
+          </a>
+          <a class="doc-card" href="learn.html">
+            <h3>Learn 7aba</h3>
+            <p>Follow short lessons from the first program to collections and files.</p>
+            <span>Start learning →</span>
+          </a>
+          <a class="doc-card" href="../tests/comprehensive_showcase.7ba">
+            <h3>Code examples</h3>
+            <p>Open a runnable sample that exercises the current language.</p>
+            <span>View sample →</span>
+          </a>
+          <a class="doc-card" href="https://github.com/umx0x/7aba-Lang/tree/main/tests">
+            <h3>Test programs</h3>
+            <p>Browse focused examples for collections, files, exceptions, and objects.</p>
+            <span>Browse tests →</span>
+          </a>
+        </div>
+        <div class="command">.\7aba.exe run .\your-file.7ba</div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <h2>Readable collection displays</h2>
+        <p class="intro">Lists, piles, matrices, and queues each get a display suited to their structure.</p>
+        <div class="display-note">
+          Lists show indexed values. Piles mark the top item. Matrices show row and column indexes. Queues show FIFO order with front, back, and capacity status.
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <h2>Inside the interpreter</h2>
+        <ul class="modules" aria-label="Interpreter modules">
+          <li>bytecode.c</li>
+          <li>runtime.c</li>
+          <li>gc.c</li>
+          <li>stdlib.c</li>
+          <li>ffi.c</li>
+          <li>typecheck.c</li>
+          <li>program_ast.c</li>
+          <li>resolver.c</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer">
+      <span>7aba-Lang · MIT License</span>
+      <a href="#docs">Documentation</a>
+      <a href="../LICENSE">License</a>
+    </div>
+  </footer>
+</body>
+</html>

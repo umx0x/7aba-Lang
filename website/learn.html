@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f4ee">
+  <meta name="description" content="Learn 7aba-Lang by writing and running small programs.">
+  <title>Learn 7aba-Lang</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --page: #f6f4ee;
+      --paper: #fffefa;
+      --ink: #35352f;
+      --muted: #77766f;
+      --line: #e6e2d8;
+      --accent: #34785a;
+      --accent-hover: #24583f;
+      --code: #f0eee7;
+      --width: 1200px;
+      --sidebar: 220px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+    body {
+      margin: 0;
+      background: var(--page);
+      color: var(--ink);
+      font: 15px/1.7 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent-hover); }
+    a:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    code, pre { font-family: "Cascadia Code", Consolas, "Liberation Mono", monospace; }
+    code { padding: 1px 4px; border-radius: 3px; background: var(--code); font-size: .9em; }
+    .wrap { width: min(var(--width), calc(100% - 40px)); margin-inline: auto; }
+
+    .top {
+      position: sticky;
+      z-index: 10;
+      top: 0;
+      height: 62px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 254, 250, .97);
+      backdrop-filter: blur(8px);
+    }
+    .top nav { display: flex; height: 100%; align-items: center; gap: 20px; }
+    .brand { display: inline-flex; flex: 0 0 auto; width: 36px; height: 36px; align-items: center; justify-content: center; animation: fade-down .45s both; }
+    .brand svg { display: block; width: 36px; height: 36px; }
+    .nav-items { display: flex; flex: 1; align-items: center; gap: 4px; }
+    .nav-items a {
+      position: relative;
+      padding: 7px 9px;
+      border-radius: 4px;
+      color: var(--ink);
+      font-size: 11px;
+      white-space: nowrap;
+      transition: color .18s ease, background-color .18s ease, transform .18s ease;
+      animation: fade-down .4s both;
+    }
+    .nav-items a:hover { background: #eeece5; color: var(--ink); }
+    .nav-items a:not(.active)::after { position: absolute; right: 9px; bottom: 3px; left: 9px; height: 1px; background: var(--accent); content: ""; transform: scaleX(0); transform-origin: left; transition: transform .2s ease; }
+    .nav-items a:hover { transform: translateY(-1px); }
+    .nav-items a:not(.active):hover::after { transform: scaleX(1); }
+    .nav-items a.active { background: var(--accent); color: var(--paper); }
+    .nav-items a:nth-child(2) { animation-delay: .03s; }
+    .nav-items a:nth-child(3) { animation-delay: .06s; }
+    .nav-items a:nth-child(4) { animation-delay: .09s; }
+    .nav-items a:nth-child(5) { animation-delay: .12s; }
+    .nav-items a:nth-child(6) { animation-delay: .15s; }
+    .nav-items a:nth-child(7) { animation-delay: .18s; }
+    .nav-items a.external { color: var(--muted); }
+    .search {
+      display: flex;
+      width: 175px;
+      height: 33px;
+      flex: 0 0 auto;
+      align-items: center;
+      gap: 7px;
+      padding: 0 8px;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: var(--paper);
+    }
+    .search label { color: var(--muted); font-size: 14px; }
+    .search input {
+      width: 100%;
+      min-width: 0;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--ink);
+      font: inherit;
+      font-size: 11px;
+    }
+    .search input::placeholder { color: #99978f; }
+    .github { flex: 0 0 auto; color: var(--muted); font-size: 17px; font-weight: 700; transition: color .18s ease, transform .18s ease; }
+    .github:hover { color: var(--accent); transform: translateY(-2px); }
+
+    .layout {
+      display: grid;
+      grid-template-columns: var(--sidebar) minmax(0, 1fr);
+      gap: 54px;
+      align-items: start;
+      padding-top: 35px;
+      padding-bottom: 70px;
+    }
+    .sidebar {
+      position: sticky;
+      top: 82px;
+      max-height: calc(100vh - 100px);
+      overflow: auto;
+      padding: 3px 12px 16px 0;
+      border-right: 1px solid var(--line);
+    }
+    .side-label {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 750;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .side-nav { display: grid; gap: 3px; }
+    .side-nav a {
+      display: block;
+      padding: 6px 9px;
+      border-left: 2px solid transparent;
+      color: #66645c;
+      font-size: 12px;
+      transition: color .18s ease, border-color .18s ease, padding-left .18s ease;
+    }
+    .side-nav a:hover, .side-nav a:focus { border-left-color: var(--accent); color: var(--accent); padding-left: 13px; }
+    .side-nav a span { margin-right: 7px; color: #a39f93; font: 10px ui-monospace, monospace; }
+    main { min-width: 0; max-width: 830px; }
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 750;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 0 0 10px; font-size: clamp(36px, 5vw, 48px); line-height: 1.1; letter-spacing: -.055em; }
+    .lead { max-width: 690px; margin: 0; color: var(--muted); font-size: 16px; }
+    #search-status { margin-top: 18px; color: var(--muted); font-size: 12px; }
+    .lesson { padding: 34px 0; border-top: 1px solid var(--line); scroll-margin-top: 82px; animation: fade-up .55s both; }
+    .lesson:first-of-type { margin-top: 28px; }
+    .lesson h2 { margin: 0 0 9px; font-size: 23px; letter-spacing: -.04em; }
+    .lesson p { margin: 0 0 12px; color: #66645c; }
+    .lesson ol, .lesson ul { padding-left: 22px; color: #66645c; }
+    .lesson li { margin: 4px 0; }
+    pre {
+      overflow-x: auto;
+      margin: 13px 0 16px;
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: var(--paper);
+      color: #514f48;
+      font-size: 12px;
+      line-height: 1.8;
+    }
+    .tip {
+      margin: 15px 0;
+      padding: 11px 14px;
+      border-left: 3px solid var(--accent);
+      background: rgba(255, 254, 250, .8);
+      color: #66645c;
+      font-size: 12px;
+    }
+    .lesson-nav { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 18px; }
+    .lesson-nav a { padding: 7px 10px; border: 1px solid var(--line); border-radius: 4px; background: var(--paper); font-size: 11px; transition: border-color .18s ease, transform .18s ease, box-shadow .18s ease; }
+    .lesson-nav a:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(53, 53, 47, .06); }
+    .lesson[hidden], .side-nav a[hidden] { display: none; }
+    footer { padding: 20px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
+    footer .wrap { display: flex; justify-content: space-between; gap: 15px; }
+    @media (max-width: 850px) {
+      .top nav { gap: 8px; }
+      .nav-items { overflow-x: auto; }
+      .nav-items a { padding: 7px 6px; font-size: 10px; }
+      .nav-items a.external { display: none; }
+      .search { width: 120px; }
+      .layout { grid-template-columns: 1fr; gap: 15px; padding-top: 16px; }
+      .sidebar {
+        position: sticky;
+        top: 62px;
+        z-index: 5;
+        max-height: none;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 7px 0;
+        border: 0;
+        border-bottom: 1px solid var(--line);
+        background: var(--page);
+      }
+      .side-label { display: none; }
+      .side-nav { display: flex; width: max-content; gap: 3px; }
+      .side-nav a { padding: 6px 9px; border: 0; border-radius: 4px; background: var(--paper); white-space: nowrap; }
+      main { max-width: none; }
+    }
+    @media (max-width: 560px) {
+      .wrap { width: calc(100% - 28px); }
+      .search { display: none; }
+      .nav-items { flex: 0 1 auto; }
+      .nav-items a.external, .nav-items a:nth-child(5) { display: none; }
+      .layout { padding-bottom: 45px; }
+      footer .wrap { flex-direction: column; }
+    }
+    @keyframes fade-down { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fade-up { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    main > header { animation: fade-up .6s both; }
+    .lesson:nth-of-type(2) { animation-delay: .05s; }
+    .lesson:nth-of-type(3) { animation-delay: .1s; }
+    .lesson:nth-of-type(4) { animation-delay: .15s; }
+    .lesson:nth-of-type(5) { animation-delay: .2s; }
+    .lesson:nth-of-type(6) { animation-delay: .25s; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <nav class="wrap" aria-label="Main navigation">
+      <a class="brand" href="index.html" aria-label="7aba-Lang home">
+        <svg viewBox="0 0 36 36" aria-hidden="true">
+          <rect x="1" y="1" width="34" height="34" rx="10" fill="#edf3ec" stroke="#d7e3d7"/>
+          <path d="M10 11h16l-9 15" fill="none" stroke="#34785a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="25.5" cy="25.5" r="2.2" fill="#24583f"/>
+        </svg>
+      </a>
+      <div class="nav-items">
+        <a class="active" href="learn.html">Learn</a>
+        <a href="index.html#about">About</a>
+        <a href="download.html">Download</a>
+        <a class="external" href="https://github.com/umx0x/7aba-Lang/commits/main/">Blog</a>
+        <a href="docs.html">Docs</a>
+        <a href="docs.html#language">Beta Docs ↗</a>
+        <a class="external" href="https://github.com/umx0x/7aba-Lang">Contribute ↗</a>
+      </div>
+      <form class="search" action="learn.html" method="get" role="search">
+        <label for="topic-search" aria-hidden="true">⌕</label>
+        <input id="topic-search" type="search" name="q" placeholder="Start typing..." aria-label="Search lessons">
+      </form>
+      <a class="github" href="https://github.com/umx0x/7aba-Lang" aria-label="7aba-Lang on GitHub">◉</a>
+    </nav>
+  </header>
+
+  <div class="wrap layout">
+    <aside class="sidebar" aria-label="Learn navigation">
+      <p class="side-label">Learn 7aba-Lang</p>
+      <nav class="side-nav">
+        <a href="#setup"><span>01</span>Get set up</a>
+        <a href="#hello"><span>02</span>Hello, world</a>
+        <a href="#values"><span>03</span>Values & variables</a>
+        <a href="#conditions"><span>04</span>Conditions & loops</a>
+        <a href="#actions"><span>05</span>Actions</a>
+        <a href="#lists"><span>06</span>Lists & display</a>
+        <a href="#collections"><span>07</span>Other collections</a>
+        <a href="#strings"><span>08</span>Strings & math</a>
+        <a href="#files"><span>09</span>Files</a>
+        <a href="#next"><span>10</span>Keep learning</a>
+      </nav>
+    </aside>
+
+    <main>
+      <header id="start">
+        <p class="eyebrow">Learn by doing</p>
+        <h1>Your first 7aba programs</h1>
+        <p class="lead">Download the interpreter, write a small <code>.7ba</code> file, and run it. No compiler setup is needed.</p>
+      </header>
+      <p id="search-status" aria-live="polite"></p>
+
+      <section class="lesson" id="setup">
+        <h2>1. Get set up</h2>
+        <ol>
+          <li><a href="download.html">Download the Windows interpreter</a>.</li>
+          <li>Save <code>7aba.exe</code> in the folder where you keep your program.</li>
+          <li>Open PowerShell in that folder.</li>
+        </ol>
+        <p>To run a program named <code>hello.7ba</code>:</p>
+        <pre>.\7aba.exe run .\hello.7ba</pre>
+        <p>Keep PowerShell open to see output and runtime errors. Users only need the executable and their <code>.7ba</code> file.</p>
+      </section>
+
+      <section class="lesson" id="hello">
+        <h2>2. Hello, world</h2>
+        <p>Create <code>hello.7ba</code> in a text editor:</p>
+        <pre>display "Hello, world!"</pre>
+        <p>Save the file, then run the command from the first lesson. <code>display</code> writes values to the terminal.</p>
+      </section>
+
+      <section class="lesson" id="values">
+        <h2>3. Values and variables</h2>
+        <p>Assign values with <code>=</code>. Variables can hold numbers, text, booleans, null, or managed collections.</p>
+        <pre>name = "Ada"
+visits = 3
+ready = true
+
+display "Welcome, " name
+next_visit = visits + 1
+display next_visit</pre>
+        <p>Optional scalar annotations check that a variable keeps the declared value type:</p>
+        <pre>tries: Int = 3
+message: String = "start"
+tries = tries + 1</pre>
+        <div class="tip">Supported annotations are <code>Int</code>, <code>Float</code>, <code>Bool</code>, <code>String</code>, and <code>Null</code>. They are optional.</div>
+      </section>
+
+      <section class="lesson" id="conditions">
+        <h2>4. Conditions and loops</h2>
+        <p><code>when</code> chooses a branch. An <code>otherwise</code> block runs when its condition is false.</p>
+        <pre>score = 82
+
+when score >= 80 {
+    display "pass"
+}
+otherwise {
+    display "try again"
+}</pre>
+        <p>Use <code>while</code> to repeat while a condition is true, or <code>repeat</code> for a fixed count:</p>
+        <pre>step = 0
+while step < 3 {
+    display step
+    step = step + 1
+}</pre>
+      </section>
+
+      <section class="lesson" id="actions">
+        <h2>5. Actions</h2>
+        <p>An action is a named block that can accept arguments and be called more than once.</p>
+        <pre>action greet(name) {
+    display "Hello, " name
+}
+
+greet("Mina")
+greet("Omar")</pre>
+        <p>Use <code>empty</code> inside an action to return early.</p>
+      </section>
+
+      <section class="lesson" id="lists">
+        <h2>6. Lists and their display</h2>
+        <p>Create a list and add values with <code>push</code>. Lists use zero-based indexes.</p>
+        <pre>list scores
+push scores 12
+push scores 24
+push scores 36
+
+display scores[0]
+len scores size
+display scores</pre>
+        <p>When displayed, a list is shown as an indexed table. This makes the contents easier to inspect while your program runs.</p>
+        <pre>TABLE scores (length=3)
+┌───────┬───────┐
+│ INDEX │ VALUE │
+├───────┼───────┤
+│ [0]   │ 12    │
+│ [1]   │ 24    │
+│ [2]   │ 36    │
+└───────┴───────┘</pre>
+      </section>
+
+      <section class="lesson" id="collections">
+        <h2>7. Other collections</h2>
+        <p>Piles, matrices, and queues have structure-specific commands and readable displays.</p>
+        <pre>pile history
+push history 10
+push history 20
+display history
+
+matrix grid 2 3
+matrix_set grid 0 1 7
+display grid
+
+queue jobs
+enqueue jobs 31
+enqueue jobs 42
+display jobs</pre>
+        <ul>
+          <li>Piles mark their top item.</li>
+          <li>Matrices show row and column indexes.</li>
+          <li>Queues show FIFO order and mark the front and back.</li>
+        </ul>
+        <p>Maps and sets support literals, lookup, and membership tests. Their current display uses the regular value format.</p>
+      </section>
+
+      <section class="lesson" id="strings">
+        <h2>8. Strings and math</h2>
+        <p>Built-in functions can trim, search, and transform strings, or perform common math operations.</p>
+        <pre>text = trim("  hello  ")
+changed = replace(text, "hello", "7aba")
+found = contains(changed, "7aba")
+where = index_of(changed, "7")
+copies = repeat("ha", 2)
+distance = sqrt(81)
+
+display changed
+display found</pre>
+        <p>String positions and searches operate on bytes; ASCII case helpers do not implement Unicode case conversion. Math trigonometry uses radians.</p>
+      </section>
+
+      <section class="lesson" id="files">
+        <h2>9. Read and write text files</h2>
+        <p>File commands use paths relative to the folder where you started the interpreter.</p>
+        <pre>message = "Hello from 7aba"
+file_write "notes.txt" message overwrite
+file_read "notes.txt" contents
+display contents</pre>
+        <p>Text file reads are bounded. Programs can also create a <code>.state</code> sidecar file to persist supported global values between runs.</p>
+      </section>
+
+      <section class="lesson" id="next">
+        <h2>10. Keep learning</h2>
+        <p>Use the full language reference for built-ins, classes, errors, and current limitations.</p>
+        <div class="lesson-nav">
+          <a href="docs.html">Open the documentation</a>
+          <a href="docs.html#builtins">Built-in function reference</a>
+          <a href="download.html">Download interpreter</a>
+          <a href="https://github.com/umx0x/7aba-Lang/tree/main/tests">Browse runnable examples</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer><div class="wrap"><span>7aba-Lang · MIT License</span><a href="index.html">Home</a></div></footer>
+  <script>
+    (function () {
+      var search = document.getElementById("topic-search");
+      var status = document.getElementById("search-status");
+      var lessons = Array.prototype.slice.call(document.querySelectorAll(".lesson"));
+      var links = Array.prototype.slice.call(document.querySelectorAll(".side-nav a"));
+      var params = new URLSearchParams(window.location.search);
+      var initialQuery = params.get("q") || "";
+
+      function applySearch(query, shouldScroll) {
+        var term = query.trim().toLowerCase();
+        var matches = [];
+        lessons.forEach(function (lesson) {
+          var match = !term || lesson.textContent.toLowerCase().indexOf(term) !== -1;
+          lesson.hidden = !match;
+          if (match) matches.push(lesson);
+        });
+        links.forEach(function (link) {
+          var target = document.querySelector(link.getAttribute("href"));
+          link.hidden = !!term && (!target || target.hidden);
+        });
+        status.textContent = term
+          ? matches.length + (matches.length === 1 ? " lesson found." : " lessons found.")
+          : "";
+        if (term && matches.length === 0) status.textContent = "No lessons match “" + query.trim() + "”.";
+        if (shouldScroll && matches.length > 0) matches[0].scrollIntoView({behavior: "smooth"});
+      }
+
+      search.value = initialQuery;
+      applySearch(initialQuery, Boolean(initialQuery));
+      search.addEventListener("input", function () {
+        applySearch(search.value, false);
+      });
+      document.querySelector(".side-nav").addEventListener("click", function (event) {
+        if (event.target.closest("a")) {
+          search.value = "";
+          applySearch("", false);
+        }
+      });
+    }());
+  </script>
+</body>
+</html>

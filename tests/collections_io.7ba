@@ -1,0 +1,53 @@
+run_number = run_number + 1
+
+when run_number == 1 {
+    matrix grid 2 3
+    matrix_set grid 1 2 42
+    queue jobs
+    enqueue jobs 11
+    enqueue jobs 22
+    enqueue jobs 33
+    dequeue jobs removed
+    enqueue jobs 44
+    message = "7ABA file I/O"
+    suffix = " works"
+    file_write "tests/collections/io.tmp" message overwrite
+    file_write "tests/collections/io.tmp" suffix append
+    file_read "tests/collections/io.tmp" restored_text
+    display "SETUP_PASS " restored_text
+}
+otherwise {
+    matrix_get grid 1 2 matrix_value
+    when matrix_value == 42 {
+        display "MATRIX_PERSISTENCE_PASS"
+    }
+    otherwise {
+        display "MATRIX_PERSISTENCE_FAIL"
+    }
+
+    peek jobs first_job
+    when first_job == 22 {
+        display "QUEUE_FIFO_PASS"
+    }
+    otherwise {
+        display "QUEUE_FIFO_FAIL"
+    }
+    display jobs
+
+    file_read "tests/collections/io.tmp" restored_text
+    display "FILE_READ_PASS " restored_text
+    len grid matrix_length
+    len jobs queue_length
+    when matrix_length == 6 {
+        display "MATRIX_LENGTH_PASS"
+    }
+    otherwise {
+        display "MATRIX_LENGTH_FAIL"
+    }
+    when queue_length == 3 {
+        display "QUEUE_LENGTH_PASS"
+    }
+    otherwise {
+        display "QUEUE_LENGTH_FAIL"
+    }
+}

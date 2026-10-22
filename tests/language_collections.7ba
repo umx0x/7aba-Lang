@@ -1,0 +1,81 @@
+users = {"name": "Ada", 7: "seven", "active": true, null: "nothing", false: "inactive"}
+items = {1, 2, 3, 2}
+empty_map = {}
+empty_set = set{}
+users["name"] = "Grace"
+name = users["name"]
+name_copy = name
+scalar_total = 5 + 4
+copy = users
+present = "name" in users
+missing = 9 in items
+len users user_count
+len items item_count
+len empty_map empty_map_count
+len empty_set empty_set_count
+
+display "MAP_INDEX_PASS " users["name"]
+display "MAP_ALIAS_PASS " copy[7]
+display "SCALAR_STRING_COPY_PASS " name_copy
+display "SCALAR_ARITHMETIC_PASS " scalar_total
+display "NULL_KEY_PASS " users[null]
+display "BOOL_KEY_PASS " users[false]
+
+when present == true {
+    display "MAP_MEMBERSHIP_PASS"
+}
+otherwise {
+    display "MAP_MEMBERSHIP_FAIL"
+}
+
+when missing == false {
+    display "SET_MEMBERSHIP_PASS"
+}
+otherwise {
+    display "SET_MEMBERSHIP_FAIL"
+}
+
+when "active" in users {
+    display "DIRECT_MAP_MEMBERSHIP_PASS"
+}
+otherwise {
+    display "DIRECT_MAP_MEMBERSHIP_FAIL"
+}
+
+when 2 in items {
+    display "DIRECT_SET_MEMBERSHIP_PASS"
+}
+otherwise {
+    display "DIRECT_SET_MEMBERSHIP_FAIL"
+}
+
+display "MEMBERSHIP_EXPRESSION "
+display 2 in items
+
+when user_count == 5 {
+    display "MAP_LENGTH_PASS"
+}
+otherwise {
+    display "MAP_LENGTH_FAIL"
+}
+
+when item_count == 3 {
+    display "SET_DEDUP_LENGTH_PASS"
+}
+otherwise {
+    display "SET_DEDUP_LENGTH_FAIL"
+}
+
+when empty_map_count == 0 {
+    display "EMPTY_MAP_PASS"
+}
+otherwise {
+    display "EMPTY_MAP_FAIL"
+}
+
+when empty_set_count == 0 {
+    display "EMPTY_SET_PASS"
+}
+otherwise {
+    display "EMPTY_SET_FAIL"
+}

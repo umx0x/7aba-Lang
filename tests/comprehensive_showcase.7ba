@@ -1,0 +1,101 @@
+# 7ABA comprehensive runtime showcase
+
+display "=== 7ABA COMPREHENSIVE SHOWCASE ==="
+
+# Variables, precedence, and list operations
+base = 5
+multiplier = 3
+product = base + 2 * multiplier
+display "Arithmetic result: " product
+
+list checkpoints
+push checkpoints product
+push checkpoints product * 3
+len checkpoints checkpoint_count
+display "Second checkpoint: " checkpoints[1]
+display "Checkpoint count: " checkpoint_count
+
+# repeat and while both update variables dynamically
+total = 0
+repeat 3 {
+    total = total + product
+}
+
+display "Repeated total: " total
+
+step = 0
+while step < 3 {
+    step = step + 1
+}
+
+display "While steps: " step
+
+# True and false branches exercise when/otherwise
+when total == 33 {
+    display "PASS: true when branch"
+}
+otherwise {
+    display "FAIL: total did not match"
+}
+
+when step == 2 {
+    display "FAIL: unexpected loop count"
+}
+otherwise {
+    display "PASS: otherwise branch"
+}
+
+# Calls before definitions verify forward action registration.
+announce()
+summarize(total, step)
+early_return(0)
+
+when product == checkpoints[0] {
+    display "PASS: list and expression values agree"
+}
+otherwise {
+    display "FAIL: list value mismatch"
+}
+
+display "=== SHOWCASE COMPLETE ==="
+
+action announce() {
+    display "Action with no parameters"
+    empty
+}
+
+action summarize(amount, repetitions) {
+    when repetitions == 0 {
+        display "No countdown requested"
+        empty
+    }
+    otherwise {
+        display "Action received total: " amount
+        countdown(repetitions)
+        empty
+        display "FAIL: statement after empty ran"
+    }
+}
+
+action countdown(remaining) {
+    when remaining == 0 {
+        display "Recursive action complete"
+        empty
+    }
+    otherwise {
+        display "Countdown: " remaining
+        remaining = remaining - 1
+        countdown(remaining)
+    }
+}
+
+action early_return(value) {
+    when value == 0 {
+        display "Explicit empty return executed"
+        empty
+    }
+    otherwise {
+        display "FAIL: early return condition was false"
+    }
+    display "FAIL: early return did not leave the action"
+}

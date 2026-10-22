@@ -1,0 +1,12 @@
+i = 0
+display "Give Me Total Number : "
+input N
+list values
+while i < N {
+    display "Give Me " i+1 " Number : "
+    input value
+    push values value
+    i = i + 1
+}
+
+display values

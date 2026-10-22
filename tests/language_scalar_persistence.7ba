@@ -1,0 +1,8 @@
+counter = counter + 1
+when counter == 1 {
+    message = "persisted scalar string"
+}
+otherwise {
+    display "SCALAR_STRING_PERSISTENCE " message
+}
+display "SCALAR_PERSISTENCE " counter
